@@ -1,7 +1,7 @@
 import React, {useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default () => {
+const Fibonnaci = () => {
     const [seenIndexes, setSeenIndexes] = useState([]);
     const [values, setValues] = useState({});
     const [index, setIndex] = useState('');
@@ -63,3 +63,5 @@ export default () => {
         {renderValues()}
     </div>);
 }
+
+export default Fibonnaci
