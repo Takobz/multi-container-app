@@ -4,3 +4,20 @@ services:
     image: 'postgres:latest'
   redis:
     image: 'redis:latest'
+  server:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+    volumes:
+      - /app/node_modules # don't try to override this folder
+      - ./server:/app # map references from server to app in current container
+    
+    #varibleName=value - populate value at RUNTIME
+    environment:
+      - REDIS_HOST=redis # gets the redis service's host URL.
+      - REDIS_PORT=6379 # defaul redis port
+      - PGUSER=postgres # default 
+      - PGHOST=postgres # default
+      - PGDATABASE=postgres # default
+      - PGPASSWORD=postgres_password # default postgres database
+      - PGPORT=5432 # default postgres port
