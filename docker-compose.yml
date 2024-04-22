@@ -21,3 +21,13 @@ services:
       - PGDATABASE=postgres # default
       - PGPASSWORD=postgres_password # default postgres database
       - PGPORT=5432 # default postgres port
+  # worker:
+  #   build:
+  #     dockerfile: Dockerfile.dev
+  #     context: ./worker
+  #   volumes:
+  #     - /app/node_modules
+  #     - ./worker:/app
+  #   environments:
+  #    - REDIS_HOST=redis
+  #    - REDIS_PORT=6379
