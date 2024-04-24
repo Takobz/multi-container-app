@@ -1,0 +1,4 @@
+FROM nginx
+
+# replace nginx base image config file with my default file
+COPY ./default.config /etc/nginx/conf.d/default.config
