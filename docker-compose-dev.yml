@@ -12,13 +12,13 @@ services:
       - client
     restart: always # always want nginx to restart on failure.
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       context: ./nginx
     ports:
      - '3050:80'
   api:
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       context: ./server
     volumes:
       - /app/node_modules # don't try to override this folder
@@ -35,7 +35,7 @@ services:
       - PGPORT=5432 # default postgres port
   client:
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       context: ./client
     volumes:
       - /app/node_modules
@@ -44,7 +44,7 @@ services:
       - WDS_SOCKET_PORT=0
   worker:
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       context: ./worker
     volumes:
       - /app/node_modules
