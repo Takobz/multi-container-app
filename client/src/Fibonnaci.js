@@ -7,12 +7,16 @@ const Fibonnaci = () => {
     const [index, setIndex] = useState('');
 
     const fecthValues = async () => {
-        const values = await axios.get('/api/values/current');
+        const values = await axios.get('/api/values/current', {
+            withCredentials: true
+        });
         setValues(values.data);
     }
 
     const fetchIndexes = async () => {
-        const indexes = await axios.get('/api/values/all');
+        const indexes = await axios.get('/api/values/all', {
+            withCredentials: true
+        });
         setSeenIndexes(indexes.data)
     }
 
@@ -41,9 +45,13 @@ const Fibonnaci = () => {
     }
 
     useEffect(() => {
-        fecthValues();
-        fetchIndexes();
-    }, []); //zero dependencies i.e [] means this will run once after intial render, like ComponentDidMount 
+        const fetchData = async () => {
+            await fecthValues();
+            await fetchIndexes();
+        }
+        
+        fetchData();
+    }, [index]); //zero dependencies i.e [] means this will run once after intial render, like ComponentDidMount 
 
     return(
     <div>

@@ -18,7 +18,7 @@ function fibonacci(index){
 
 //On new value in the redis cache
 subscription.on('message', (channel, message) => {
-    redisClient.hset('values', message. fibonacci(parseInt(message)));
+    redisClient.hset('values', message, fibonacci(parseInt(message)));
 });
 
 //subscribe to insert events into our cache
