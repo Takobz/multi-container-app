@@ -1,0 +1,24 @@
+sudo: required
+services:
+  - docker
+
+# The ./client is the context of the build, and the Dockerfile.dev is the file to build from.
+# Means look into the client directory for the files needed to build the image.
+before_install:
+  - docker build -t khutsokobela/react-test -f ./client/Dockerfile.dev ./client
+
+## makes sure test script exists
+script:
+  - docker run -e CI=true khutsokobela/react-test npm test
+
+# After successful test run, build the production images.
+after_success:
+  - docker build -t khutsokobela/multi-client ./client
+  - docker build -t khutsokobela/multi-nginx ./nginx
+  - docker build -t khutsokobela/multi-server ./server
+  - docker build -t khutsokobela/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin # login to docker hub
+  - docker push khutsokobela/multi-client # push to docker hub
+  - docker push khutsokobela/multi-nginx
+  - docker push khutsokobela/multi-server
+  - docker push khutsokobela/multi-worker
