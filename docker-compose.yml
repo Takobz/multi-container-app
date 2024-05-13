@@ -1,56 +1,31 @@
-version: '3'
+version: "3"
 services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      POSTGRES_PASSWORD: postgres_password
-  redis:
-    image: 'redis:latest'
-  nginx:
-    depends_on:
-      - api
-      - client
-    restart: always # always want nginx to restart on failure.
-    build:
-      dockerfile: Dockerfile
-      context: ./nginx
-    ports:
-     - '3050:80'
-  api:
-    build:
-      dockerfile: Dockerfile
-      context: ./server
-    volumes:
-      - /app/node_modules # don't try to override this folder
-      - ./server:/app # map references from server to app in current container
-    
-    #varibleName=value - populate value at RUNTIME
-    environment:
-      - REDIS_HOST=redis # gets the redis service's host URL.
-      - REDIS_PORT=6379 # defaul redis port
-      - PGUSER=postgres # default 
-      - PGHOST=postgres # default
-      - PGDATABASE=postgres # default
-      - PGPASSWORD=postgres_password # default postgres database
-      - PGPORT=5432 # default postgres port
   client:
-    build:
-      dockerfile: Dockerfile
-      context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
+    image: "khutsokobela/multi-client"
+    mem_limit: 128m
+    hostname: client
+  server:
+    image: "khutsokobela/multi-server"
+    mem_limit: 128m
+    hostname: api
     environment:
-      - WDS_SOCKET_PORT=0
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
+      - PGUSER=$PGUSER
+      - PGHOST=$PGHOST
+      - PGDATABASE=$PGDATABASE
+      - PGPASSWORD=$PGPASSWORD
+      - PGPORT=$PGPORT
   worker:
-    build:
-      dockerfile: Dockerfile
-      context: ./worker
-    volumes:
-      - /app/node_modules
-      - ./worker:/app
+    image: "khutsokobela/multi-worker"
+    mem_limit: 128m
+    hostname: worker
     environment:
-     - REDIS_HOST=redis
-     - REDIS_PORT=6379
-
-#started with docker-compose up --build
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
+  nginx:
+    image: "khutsokobela/multi-nginx"
+    mem_limit: 128m
+    hostname: nginx
+    ports:
+      - "80:80"
