@@ -22,3 +22,16 @@ after_success:
   - docker push khutsokobela/multi-nginx
   - docker push khutsokobela/multi-server
   - docker push khutsokobela/multi-worker
+
+#Deployment to AWS ElasticBeanStalk
+deploy:
+  provider: elasticbeanstalk
+  region: 'eu-north-1'
+  app: 'multi-docker'
+  env: 'Multi-docker-env'
+  bucket_name: 'elasticbeanstalk-eu-north-1-533267286361'
+  bucket_path: 'docker-multi'
+  on:
+    branch: develop #will change to main once everything is completed
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
