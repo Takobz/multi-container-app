@@ -32,6 +32,6 @@ deploy:
   bucket_name: 'elasticbeanstalk-eu-north-1-533267286361'
   bucket_path: 'docker-multi'
   on:
-    branch: develop #will change to main once everything is completed
+    branch: develop #will change to main once everything is completed - for travis.
   access_key_id: $AWS_ACCESS_KEY
   secret_access_key: $AWS_SECRET_KEY
